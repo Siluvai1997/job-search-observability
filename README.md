@@ -1,64 +1,125 @@
+# Job Search Observability
 
-# Job Application Health Monitor
+> Bringing DevOps observability to job hunting — a dashboard that monitors your applications like production services.
 
-Monitor your job applications like a DevOps system monitors services.
+---
 
-This Streamlit app reads **privacy-safe dummy YAML records** and visualizes:
-- KPIs (Total, Applied, Interview, Rejected, Offers)
-- Status distribution (pie)
-- Application table with filters
-- **Applications per week timeline (Plotly)**
-- **Weekly success-rate trend (Plotly)**
+## Live Demo
+**[Open in Streamlit](https://job-search-observability-uvm4p3rhcdss5hox2mphbz.streamlit.app/)**
 
-> Uses *dummy data* (Company A..N)
+This interactive dashboard visualizes your job applications as if they were production services, applying **DevOps observability** principles to your career tracking.
+
+---
+
+## Overview
+
+**Job Search Observability** is a Python + Streamlit dashboard that tracks and analyzes your job applications with the same approach DevOps teams use to monitor system health.
+
+It helps visualize:
+
+- Total applications, interviews, offers, and rejections  
+- Status distribution  
+- Applications per week  
+- Weekly success-rate trends  
+- Filterable data table for analysis
+
+---
 
 ## Tech Stack
-- Python 3.10+
-- Streamlit
-- Pandas
-- PyYAML
-- Plotly
 
-## Run Locally
-```bash
-pip install -r requirements.txt
-python generate_dummy_data.py   # creates data/dummy_jobs/* with YAML files
-streamlit run app.py
-```
+| Component | Technology |
+|------------|-------------|
+| UI / Dashboard | Streamlit |
+| Data Handling | Pandas |
+| Visualization | Plotly |
+| Data Format | YAML (for demo dataset) |
+| Language | Python 3.10+ |
 
-## Project Layout
+---
+
+## Repository Structure
+
 ```
-job-application-health-monitor/
-├── app.py
-├── generate_dummy_data.py
+job-search-observability/
+├── app.py                        # Streamlit app
+├── generate_dummy_data.py        # Optional data generator
 ├── data/
-│   └── dummy_jobs/     # created by generate_dummy_data.py
+│   └── dummy_jobs/               # Pre-generated demo YAML files
 ├── requirements.txt
 ├── README.md
 └── docs/
     └── architecture_diagram.txt
 ```
 
-## Privacy Note
-All records are simulated; no real company names or job details are included.  
-For private usage, point the app to your real folder structure *without committing data* to Git.
+---
 
-## Live Demo
-Check out the live version of this dashboard on Streamlit Cloud:
+## Demo Data
 
-### [Job Search Observability – Live Demo](https://job-search-observability-uvm4p3rhcdss5hox2mphbz.streamlit.app/)
+This dashboard uses **pre-generated dummy YAML files** stored under  
+`data/dummy_jobs/` to simulate real job-application data.
 
-This public demo runs directly from the GitHub repo and uses simulated data for privacy. Built with Python · Streamlit · Plotly · YAML. Designed to demonstrate how DevOps observability concepts can be applied to everyday workflows like job hunting.
-Feel free to explore:
+Each record represents a different company and contains:
+
+```yaml
+job_title: Cloud Engineer
+status: interview
+date_applied: 2025-09-14
+last_update: 2025-09-25
+notes: "Demo record for visualization."
 ```
-  - Real-time metrics for job applications (total, interviews, rejections, offers)
-  - Status distribution visualization
-  - Weekly timeline of applications
-  - Success-rate trend analysis
+
+The data is intentionally fictional and safe to publish.  
+You can view or edit these files directly to adjust the dashboard visuals.
+
+---
+
+## Generate New Dummy Data (Optional)
+
+The included `generate_dummy_data.py` script can be used to generate new demo data locally:
+
+```bash
+python generate_dummy_data.py
 ```
 
-## Ideas to Extend
-- Export CSV/PDF report
-- Add SLA timers (e.g., auto-flag applications with no response for 14+ days)
-- Integrate a Gmail API for private response tracking (keep data local)
-- Publish to Streamlit Cloud for a live demo
+It creates about **20–30 randomized YAML files** under `data/dummy_jobs/`, each simulating a unique company and application status.
+
+Commit and push these new files to update your public dashboard.
+
+---
+
+## How to Run Locally
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/Siluvai1997/job-search-observability.git
+cd job-search-observability
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Run Streamlit app
+streamlit run app.py
+```
+
+Then open your browser at **http://localhost:8501**
+
+---
+
+## Concept Inspiration
+
+> "If we monitor systems to ensure uptime, why not monitor our job search the same way?"
+
+This project applies the **DevOps mindset** to personal career management — tracking outcomes, metrics, and performance indicators like a production-grade system.
+
+---
+
+## Future Enhancements
+
+- Add email or LinkedIn API integration for auto-tracking responses  
+- Introduce analytics for “response rate per job board”  
+- Export dashboards as PDF reports  
+- Integrate persistent storage for long-term history  
+
+---
+
+⭐ If you like this project, consider giving it a star on GitHub — it helps more people discover it!
