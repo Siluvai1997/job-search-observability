@@ -13,13 +13,21 @@ st.write("Treat your job search like a DevOps system — visualize application h
 # Load YAML records
 jobs = []
 root = Path("data/dummy_jobs")
-# Auto-generate demo data if folder is empty (for Streamlit Cloud)
+
+# Auto-generate demo data if folder is missing or empty (works on Streamlit Cloud)
 if not root.exists() or not any(root.iterdir()):
-    import subprocess, sys
-    subprocess.run([sys.executable, "generate_dummy_data.py"], check=False)
-if not root.exists():
-    st.error("No data found. Run: `python generate_dummy_data.py`")
-    st.stop()
+    import subprocess, sys, os
+    gen_script = Path(__file__).parent / "generate_dummy_data.py"
+    if gen_script.exists():
+        result = subprocess.run(
+            [sys.executable, str(gen_script)],
+            cwd=str(Path(__file__).parent),
+            capture_output=True,
+            text=True
+        )
+        st.info("Dummy data auto-generated " if result.returncode == 0 else f" Failed to generate data: {result.stderr}")
+    else:
+        st.warning("generate_dummy_data.py not found. Please add it to the repo.")
 
 for company_dir in sorted(root.iterdir()):
     status_file = company_dir / "status.yaml"
