@@ -1,10 +1,10 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 from pathlib import Path
 import yaml
 import tempfile
+import runpy
 
 st.set_page_config(page_title="Job Application Health Monitor", page_icon="📊", layout="wide")
 
@@ -13,35 +13,29 @@ st.write("Treat your job search like a DevOps system — visualize application h
 
 # --- Load YAML records & auto/manual generation ---
 jobs = []
+
+# Use temp folder for Streamlit Cloud
 root = Path(tempfile.gettempdir()) / "dummy_jobs"
 gen_script = Path(__file__).parent / "generate_dummy_data.py"
 
-# sidebar button for manual trigger
+# Sidebar control for demo data
 st.sidebar.header("Demo Data")
-if st.sidebar.button(" Generate Demo Data"):
-    st.sidebar.write("Creating demo records...")
-    import importlib.util, runpy
-    if gen_script.exists():
+if st.sidebar.button("🔁 Generate Demo Data"):
+    try:
         runpy.run_path(str(gen_script))
         st.sidebar.success("Demo data generated!")
-    else:
-        st.sidebar.error("generate_dummy_data.py not found!")
+    except Exception as e:
+        st.sidebar.error(f"Failed: {e}")
 
-# automatic generation on startup
+# Auto-generate once if empty
 if not root.exists() or not any(root.iterdir()):
     try:
-        import runpy
         runpy.run_path(str(gen_script))
         st.info("Dummy data auto-generated ")
     except Exception as e:
-        st.warning(f" Auto-generation failed: {e}")
+        st.warning(f"  Auto-generation failed: {e}")
 
-# now read YAML files
-if not root.exists() or not any(root.iterdir()):
-    st.warning("No job YAML files found. Click **Generate Demo Data** in the sidebar.")
-    st.stop()
-
-
+# Read YAML files
 for company_dir in sorted(root.iterdir()):
     status_file = company_dir / "status.yaml"
     if status_file.exists():
@@ -51,11 +45,11 @@ for company_dir in sorted(root.iterdir()):
             jobs.append(info)
 
 if not jobs:
-    st.warning("No job YAML files found. Run: `python generate_dummy_data.py`")
+    st.warning("No job YAML files found. Click **Generate Demo Data** in the sidebar.")
     st.stop()
 
+# Convert to DataFrame
 df = pd.DataFrame(jobs)
-# Parse dates
 df["date_applied"] = pd.to_datetime(df["date_applied"], errors="coerce")
 df["last_update"] = pd.to_datetime(df["last_update"], errors="coerce")
 
@@ -95,7 +89,7 @@ with left:
     filtered = filtered.sort_values(by=sort_col, ascending=True)
     st.dataframe(filtered[["company", "job_title", "status", "date_applied", "last_update", "notes"]], use_container_width=True)
 
-# --- New: Timeline - Applications per Week
+# --- Applications per Week
 st.subheader("Applications per Week")
 weekly = df.set_index("date_applied").sort_index()
 weekly_counts = weekly.resample("W-MON").size().reset_index(name="applications")
@@ -104,7 +98,7 @@ fig_line_apps = px.line(weekly_counts, x="week", y="applications", markers=True)
 fig_line_apps.update_layout(xaxis_title="Week (starting Monday)", yaxis_title="Applications")
 st.plotly_chart(fig_line_apps, use_container_width=True)
 
-# --- New: Weekly Success Rate Trend
+# --- Weekly Success Rate Trend
 st.subheader("Weekly Success Rate (Interview + Offer)")
 weekly_status = weekly.resample("W-MON")["status"].value_counts().unstack(fill_value=0).reset_index()
 weekly_status.rename(columns={"date_applied": "week"}, inplace=True)
