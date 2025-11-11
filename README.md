@@ -1,6 +1,6 @@
 # Job Search Observability
 
-> Bringing DevOps observability to job hunting — a dashboard that monitors your applications like production services.
+> A Streamlit + Plotly dashboard that visualizes your job-application health using dummy data for privacy. Demonstrates data automation, observability concepts, and dashboard design — DevOps applied to everyday life.
 
 ---
 
