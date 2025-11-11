@@ -1,0 +1,12 @@
+# Ignore generated dummy data
+data/dummy_jobs/*.yaml
+data/dummy_jobs/*.yml
+
+# Streamlit cache and local state
+.streamlit/
+__pycache__/
+*.pyc
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
