@@ -1,0 +1,5 @@
+
+Architecture (Demo Edition)
+---------------------------
+[Dummy YAML Files per Job] --> Streamlit App (app.py) --> KPIs + Pie + Table + Plotly Trends
+   (data/dummy_jobs/*)                                  (weekly counts + success-rate)
