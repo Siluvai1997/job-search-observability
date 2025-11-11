@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 import tempfile
 import runpy
+import time
 
 st.set_page_config(page_title="Job Application Health Monitor", page_icon="📊", layout="wide")
 
@@ -36,13 +37,32 @@ if not root.exists() or not any(root.iterdir()):
         st.warning(f"  Auto-generation failed: {e}")
 
 # Read YAML files
+# Ensure the folder exists before scanning
+max_wait = 3  # seconds
+waited = 0
+while not root.exists() and waited < max_wait:
+    time.sleep(0.5)
+    waited += 0.5
+
+if not root.exists():
+    st.error("Dummy data folder not found, generation failed.")
+    st.stop()
+
+# If folder exists but no data yet, wait a bit for file writes to complete
+if not any(root.iterdir()):
+    time.sleep(1)
+
+jobs = []
 for company_dir in sorted(root.iterdir()):
-    status_file = company_dir / "status.yaml"
-    if status_file.exists():
-        with open(status_file) as f:
-            info = yaml.safe_load(f)
-            info["company"] = company_dir.name
-            jobs.append(info)
+    try:
+        status_file = company_dir / "status.yaml"
+        if status_file.exists():
+            with open(status_file) as f:
+                info = yaml.safe_load(f)
+                info["company"] = company_dir.name
+                jobs.append(info)
+    except Exception as e:
+        st.write(f" Skipped a folder due to error: {e}")
 
 if not jobs:
     st.warning("No job YAML files found. Click **Generate Demo Data** in the sidebar.")
