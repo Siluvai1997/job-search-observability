@@ -107,9 +107,8 @@ Then open your browser at **http://localhost:8501**
 
 ## Concept Inspiration
 
-> "If we monitor systems to ensure uptime, why not monitor our job search the same way?"
-
-This project applies the **DevOps mindset** to personal career management — tracking outcomes, metrics, and performance indicators like a production-grade system.
+> We monitor systems to ensure uptime — so why not apply the same mindset to our job search?
+This dashboard brings **DevOps-style** observability to personal career growth, tracking outcomes and success metrics just like we do for production environments.
 
 ---
 
