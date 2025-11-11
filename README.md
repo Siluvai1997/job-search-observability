@@ -48,14 +48,14 @@ Check out the live version of this dashboard on Streamlit Cloud:
 
 ### [Job Search Observability – Live Demo](https://job-search-observability-uvm4p3rhcdss5hox2mphbz.streamlit.app/)
 
-This public demo runs directly from the GitHub repo and uses simulated data for privacy.
+This public demo runs directly from the GitHub repo and uses simulated data for privacy. Built with Python · Streamlit · Plotly · YAML. Designed to demonstrate how DevOps observability concepts can be applied to everyday workflows like job hunting.
 Feel free to explore:
+```
   - Real-time metrics for job applications (total, interviews, rejections, offers)
   - Status distribution visualization
   - Weekly timeline of applications
   - Success-rate trend analysis
-- Built with Python · Streamlit · Plotly · YAML
-  Designed to demonstrate how DevOps observability concepts can be applied to everyday workflows like job hunting.
+```
 
 ## Ideas to Extend
 - Export CSV/PDF report
