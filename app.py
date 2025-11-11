@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 import yaml
+import tempfile
 
 st.set_page_config(page_title="Job Application Health Monitor", page_icon="📊", layout="wide")
 
@@ -12,7 +13,7 @@ st.write("Treat your job search like a DevOps system — visualize application h
 
 # --- Load YAML records & auto/manual generation ---
 jobs = []
-root = Path("data/dummy_jobs")
+root = Path(tempfile.gettempdir()) / "dummy_jobs"
 gen_script = Path(__file__).parent / "generate_dummy_data.py"
 
 # sidebar button for manual trigger
