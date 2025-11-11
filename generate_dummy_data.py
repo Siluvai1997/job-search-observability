@@ -1,14 +1,18 @@
-# generate_dummy_data.py
-import os, random, datetime, yaml, tempfile
+import os
+import random
+import datetime
+import yaml
+import tempfile
 from pathlib import Path
 
 def main():
+    # use /tmp so Streamlit Cloud can write
     base = Path(tempfile.gettempdir()) / "dummy_jobs"
     base.mkdir(parents=True, exist_ok=True)
 
     statuses = ["applied", "interview", "rejected", "offer"]
     companies = [f"Company{chr(65+i)}" for i in range(20)]
-    roles = ["DevOps Engineer", "Cloud Engineer", "SRE", "Platform Engineer"]
+    roles = ["DevOps Engineer", "Cloud Engineer", "SRE", "Platform Engineer", "DevOps Analyst", "Infrastructure Engineer", "Kubernetes Engineer"]
 
     today = datetime.date.today()
     start = today.replace(month=max(1, today.month - 4), day=1)
