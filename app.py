@@ -7,7 +7,7 @@ import yaml
 
 st.set_page_config(page_title="Job Application Health Monitor", page_icon="📊", layout="wide")
 
-st.title("📊 Job Application Health Monitor")
+st.title("Job Application Health Monitor")
 st.write("Treat your job search like a DevOps system — visualize application health, status distribution, and trends over time.")
 
 # Load YAML records
@@ -71,7 +71,7 @@ with left:
     st.dataframe(filtered[["company", "job_title", "status", "date_applied", "last_update", "notes"]], use_container_width=True)
 
 # --- New: Timeline - Applications per Week
-st.subheader("📅 Applications per Week")
+st.subheader("Applications per Week")
 weekly = df.set_index("date_applied").sort_index()
 weekly_counts = weekly.resample("W-MON").size().reset_index(name="applications")
 weekly_counts.rename(columns={"date_applied": "week"}, inplace=True)
@@ -80,7 +80,7 @@ fig_line_apps.update_layout(xaxis_title="Week (starting Monday)", yaxis_title="A
 st.plotly_chart(fig_line_apps, use_container_width=True)
 
 # --- New: Weekly Success Rate Trend
-st.subheader("📈 Weekly Success Rate (Interview + Offer)")
+st.subheader("Weekly Success Rate (Interview + Offer)")
 weekly_status = weekly.resample("W-MON")["status"].value_counts().unstack(fill_value=0).reset_index()
 weekly_status.rename(columns={"date_applied": "week"}, inplace=True)
 
