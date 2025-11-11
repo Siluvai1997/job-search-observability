@@ -43,6 +43,20 @@ job-application-health-monitor/
 All records are simulated; no real company names or job details are included.  
 For private usage, point the app to your real folder structure *without committing data* to Git.
 
+## Live Demo
+Check out the live version of this dashboard on Streamlit Cloud:
+
+### [Job Search Observability – Live Demo](https://job-search-observability-uvm4p3rhcdss5hox2mphbz.streamlit.app/)
+
+This public demo runs directly from the GitHub repo and uses simulated data for privacy.
+Feel free to explore:
+  - Real-time metrics for job applications (total, interviews, rejections, offers)
+  - Status distribution visualization
+  - Weekly timeline of applications
+  - Success-rate trend analysis
+- Built with Python · Streamlit · Plotly · YAML
+  Designed to demonstrate how DevOps observability concepts can be applied to everyday workflows like job hunting.
+
 ## Ideas to Extend
 - Export CSV/PDF report
 - Add SLA timers (e.g., auto-flag applications with no response for 14+ days)
