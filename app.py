@@ -3,69 +3,30 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 import yaml
-import tempfile
-import runpy
-import time
 
 st.set_page_config(page_title="Job Application Health Monitor", page_icon="📊", layout="wide")
 
 st.title("Job Application Health Monitor")
 st.write("Treat your job search like a DevOps system — visualize application health, status distribution, and trends over time.")
 
-# --- Load YAML records & auto/manual generation ---
+# --- Load YAML records ---
 jobs = []
+root = Path("data/dummy_jobs")
 
-# Use temp folder for Streamlit Cloud
-root = Path(tempfile.gettempdir()) / "dummy_jobs"
-gen_script = Path(__file__).parent / "generate_dummy_data.py"
-
-# Sidebar control for demo data
-st.sidebar.header("Demo Data")
-if st.sidebar.button("🔁 Generate Demo Data"):
-    try:
-        runpy.run_path(str(gen_script))
-        st.sidebar.success("Demo data generated!")
-    except Exception as e:
-        st.sidebar.error(f"Failed: {e}")
-
-# Auto-generate once if empty
 if not root.exists() or not any(root.iterdir()):
-    try:
-        runpy.run_path(str(gen_script))
-        st.info("Dummy data auto-generated ")
-    except Exception as e:
-        st.warning(f"  Auto-generation failed: {e}")
-
-# Read YAML files
-# Ensure the folder exists before scanning
-max_wait = 3  # seconds
-waited = 0
-while not root.exists() and waited < max_wait:
-    time.sleep(0.5)
-    waited += 0.5
-
-if not root.exists():
-    st.error("Dummy data folder not found, generation failed.")
+    st.error("No job YAML files found. Please add demo data under data/dummy_jobs/.")
     st.stop()
 
-# If folder exists but no data yet, wait a bit for file writes to complete
-if not any(root.iterdir()):
-    time.sleep(1)
-
-jobs = []
 for company_dir in sorted(root.iterdir()):
-    try:
-        status_file = company_dir / "status.yaml"
-        if status_file.exists():
-            with open(status_file) as f:
-                info = yaml.safe_load(f)
-                info["company"] = company_dir.name
-                jobs.append(info)
-    except Exception as e:
-        st.write(f" Skipped a folder due to error: {e}")
+    status_file = company_dir / "status.yaml"
+    if status_file.exists():
+        with open(status_file) as f:
+            info = yaml.safe_load(f)
+            info["company"] = company_dir.name
+            jobs.append(info)
 
 if not jobs:
-    st.warning("No job YAML files found. Click **Generate Demo Data** in the sidebar.")
+    st.warning("No job YAML files found.")
     st.stop()
 
 # Convert to DataFrame
