@@ -10,24 +10,36 @@ st.set_page_config(page_title="Job Application Health Monitor", page_icon="📊"
 st.title("Job Application Health Monitor")
 st.write("Treat your job search like a DevOps system — visualize application health, status distribution, and trends over time.")
 
-# Load YAML records
+# --- Load YAML records & auto/manual generation ---
 jobs = []
 root = Path("data/dummy_jobs")
+gen_script = Path(__file__).parent / "generate_dummy_data.py"
 
-# Auto-generate demo data if folder is missing or empty (works on Streamlit Cloud)
-if not root.exists() or not any(root.iterdir()):
-    import subprocess, sys, os
-    gen_script = Path(__file__).parent / "generate_dummy_data.py"
+# sidebar button for manual trigger
+st.sidebar.header("Demo Data")
+if st.sidebar.button(" Generate Demo Data"):
+    st.sidebar.write("Creating demo records...")
+    import importlib.util, runpy
     if gen_script.exists():
-        result = subprocess.run(
-            [sys.executable, str(gen_script)],
-            cwd=str(Path(__file__).parent),
-            capture_output=True,
-            text=True
-        )
-        st.info("Dummy data auto-generated " if result.returncode == 0 else f" Failed to generate data: {result.stderr}")
+        runpy.run_path(str(gen_script))
+        st.sidebar.success("Demo data generated!")
     else:
-        st.warning("generate_dummy_data.py not found. Please add it to the repo.")
+        st.sidebar.error("generate_dummy_data.py not found!")
+
+# automatic generation on startup
+if not root.exists() or not any(root.iterdir()):
+    try:
+        import runpy
+        runpy.run_path(str(gen_script))
+        st.info("Dummy data auto-generated ")
+    except Exception as e:
+        st.warning(f" Auto-generation failed: {e}")
+
+# now read YAML files
+if not root.exists() or not any(root.iterdir()):
+    st.warning("No job YAML files found. Click **Generate Demo Data** in the sidebar.")
+    st.stop()
+
 
 for company_dir in sorted(root.iterdir()):
     status_file = company_dir / "status.yaml"
