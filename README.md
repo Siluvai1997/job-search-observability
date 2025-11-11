@@ -10,7 +10,7 @@ This Streamlit app reads **privacy-safe dummy YAML records** and visualizes:
 - **Applications per week timeline (Plotly)**
 - **Weekly success-rate trend (Plotly)**
 
-> Uses *dummy data* (Company A..N) so you can publish this repo safely.
+> Uses *dummy data* (Company A..N)
 
 ## Tech Stack
 - Python 3.10+
